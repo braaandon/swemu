@@ -1,5 +1,7 @@
 # Stopwatch Emulator
 
+https://github.com/braaandon/swemu/assets/86573128/9d8eccfa-1271-4946-93ce-cbe7885cefeb
+
 ## Guide
 
 - Build both the emulator and patcher
