@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(kareplace)
+project(emulator)
 include(FetchContent)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -18,5 +18,5 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MT")
 endif ()
 
-add_executable(kareplace src/main.cpp)
-target_link_libraries(kareplace PRIVATE httplib OpenSSL::SSL)
+add_executable(emulator src/main.cpp)
+target_link_libraries(emulator PRIVATE httplib OpenSSL::SSL)

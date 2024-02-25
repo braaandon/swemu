@@ -1,4 +1,3 @@
-cmake-build-release
-cmake-build-debug
-keyauth.win+2.pem
-keyauth.win+2-key.pem
+*.idea
+*cmake-build-release
+*cmake-build-debug
