@@ -1,8 +1,9 @@
 #include <winsock2.h>
 #include <windows.h>
-#include <iostream>
-#include <MinHook.h>
 
+#include <iostream>
+
+#include <MinHook.h>
 
 typedef INT (WSAAPI* GetAddrInfoW_t)(PCWSTR pNodeName, PCWSTR pServiceName, const ADDRINFOW* pHints, PADDRINFOW* ppResult);
 

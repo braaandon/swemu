@@ -7,15 +7,14 @@ std::string hmac_sha256(const char* key, std::size_t klen, const char* data, std
 
 std::string generate_signature(const std::string& type, const std::string& res);
 
-void launch_and_patch();
+void start_stopwatch();
 
 std::string enckey = "unset";
 const std::string secret = "6874394dee7ff1b785b8f612f58369069b7b7f837104262e2d9e48c4d4053a9c";
 const std::string version_hash = "c926e2f8fa5c5db80f7f64811c2a790f30d7b6906a175d1d1113e78d3700ccd5f5122afe14364068815073bb251cd58efc47e31d3ab5d40f7ca75f118613dec712a05fc0fce3b386098029754d422b19b824a6e78d0124011ecc6890633cd52d4bef2d04742f8962133ae3c427630913";
 
-
 int main() {
-    launch_and_patch();
+    start_stopwatch();
 
     httplib::SSLServer svr("./keyauth.win+2.pem", "./keyauth.win+2-key.pem");
 
@@ -49,10 +48,12 @@ int main() {
         res.set_header("signature", generate_signature(req_type, res.body));
     });
 
+    // version hash
     svr.Get("/f1Lthz4/3082b26d4dd420e9e8bf00bdbd36cb9c", [](const auto& req, auto& res) {
        res.set_content(version_hash, "application/text");
     });
 
+    // update (not necessary)
     svr.Get("/u/win-x64_2.zip", [](const auto& req, auto& res) {
         std::string out;
         httplib::detail::read_file("./win-x64_2.zip", out);
@@ -64,23 +65,23 @@ int main() {
     });
 
     svr.listen("127.0.0.1", 443);
-    return 0;
+    return EXIT_SUCCESS;
 }
 
-void launch_and_patch() {
+void start_stopwatch() {
     PROCESS_INFORMATION process_information;
     STARTUPINFOA startupinfo;
     ZeroMemory(&startupinfo, sizeof(STARTUPINFOA));
-    CreateProcessA(R"(./Stopwatch.exe)", NULL, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &startupinfo, &process_information);
+    CreateProcessA("./Stopwatch.exe", nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, nullptr, &startupinfo, &process_information);
 
-    const char* carter = "./patcher.dll";
-    auto offset = VirtualAllocEx(process_information.hProcess, nullptr, strlen(carter), MEM_COMMIT, PAGE_READWRITE);
+    const char* patcher = "./patcher.dll";
+    auto offset = VirtualAllocEx(process_information.hProcess, nullptr, strlen(patcher), MEM_COMMIT, PAGE_READWRITE);
 
-    WriteProcessMemory(process_information.hProcess, offset, carter, strlen(carter), nullptr);
+    WriteProcessMemory(process_information.hProcess, offset, patcher, strlen(patcher), nullptr);
 
-    auto loadlib = GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
+    auto loadlibrary_addr= GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
 
-    CreateRemoteThread(process_information.hProcess, NULL, NULL, (LPTHREAD_START_ROUTINE)loadlib, offset, NULL, nullptr);
+    CreateRemoteThread(process_information.hProcess, nullptr, NULL, (LPTHREAD_START_ROUTINE)loadlibrary_addr, offset, NULL, nullptr);
 
     ResumeThread(process_information.hThread);
 }
