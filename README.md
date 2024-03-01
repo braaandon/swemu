@@ -4,6 +4,8 @@ https://github.com/braaandon/swemu/assets/86573128/9d8eccfa-1271-4946-93ce-cbe78
 
 ## Guide
 
+no support and no binary, probably fixed on newer versions but still works on older
+
 - Build both the emulator and patcher
 - Generate a keyauth appropriate certificate
 - Place the emulator, patcher, certificate+key and stopwatch in a folder
