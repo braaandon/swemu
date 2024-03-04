@@ -79,7 +79,7 @@ void start_stopwatch() {
 
     WriteProcessMemory(process_information.hProcess, offset, patcher, strlen(patcher), nullptr);
 
-    auto loadlibrary_addr= GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
+    auto loadlibrary_addr = GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
 
     CreateRemoteThread(process_information.hProcess, nullptr, NULL, (LPTHREAD_START_ROUTINE)loadlibrary_addr, offset, NULL, nullptr);
 
